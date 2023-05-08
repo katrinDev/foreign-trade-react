@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
+import AppRouter from "./router/AppRouter";
+import { AuthContext } from "./context/context";
+import "./styles/App.css";
 
 function App() {
+  const [isAuth, setIsAuth] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    let currentUser = localStorage.getItem("user");
+
+    if (currentUser) {
+      setIsAuth(true);
+      if (currentUser.role?.roleId === 1) {
+        setIsAdmin(true);
+      }
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthContext.Provider
+      value={{
+        isAuth,
+        setIsAuth,
+        isAdmin,
+        setIsAdmin,
+      }}
+    >
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 }
 
