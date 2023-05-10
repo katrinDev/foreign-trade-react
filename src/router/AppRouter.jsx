@@ -4,22 +4,22 @@ import { AuthContext } from "../context/context";
 import {Navigate, Route, Routes} from "react-router-dom";
 import AdminNavbar from "../components/UI/Nav/AdminNavbar";
 import UserNavbar from "../components/UI/Nav/UserNavbar";
+import Layout from "../components/Layout/Layout";
 
 
 const AppRouter = () => {
     const {isAuth, isAdmin} = useContext(AuthContext);
 
-    console.log(isAuth);
-    console.log(isAdmin);
     return (
         isAuth ? 
         isAdmin ?
         <Routes>
-            {/* <Route path="*" element={}/> */}
             {adminRoutes.map(route => 
                 <Route
                     path={route.path} 
-                    element={<><AdminNavbar/><route.component/></>}
+                    element={<Layout title={route.name}>
+                                <route.component/>
+                            </Layout>}
                     exact={route.exact}
                     key={route.path}
                 />
@@ -28,11 +28,12 @@ const AppRouter = () => {
         </Routes> 
         :
         <Routes>
-            <Route path="*" element={<UserNavbar/>}/>
             {userRoutes.map(route => 
                 <Route
                     path={route.path} 
-                    element={<route.component/>}
+                    element={<Layout title={route.name}>
+                                <route.component/>
+                            </Layout>}
                     exact={route.exact}
                     key={route.path}
                 />
@@ -53,7 +54,6 @@ const AppRouter = () => {
                 <Route path="*" element={<Navigate to='/sign-in'/>}/>
             </Routes>
         </div>
-        
     )
 }
 

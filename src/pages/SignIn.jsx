@@ -9,7 +9,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import AuthService from "../services/AuthService";
+import AuthService from "../services/authService";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/context";
@@ -96,6 +96,9 @@ export default function SignIn() {
         .catch((error) => {
           serverAnswer = error.response?.data.message;
 
+          if(!serverAnswer){
+            serverAnswer = "Ошибка соединения с сервером!"
+          }
           setSnackbarProps({
             open: true,
             severity: "error",

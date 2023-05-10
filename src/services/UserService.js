@@ -1,21 +1,19 @@
-import axios from 'axios';
-import authHeader from './auth-header';
+import axios from "axios";
 
-const API_URL = 'http://localhost:8080/api/';
+const API_URL = "http://localhost:8080/api/users";
 
 class UserService {
+  getUsers() {
+    return axios.get(API_URL);
+  }
 
-  // getPublicContent() {
-  //   return axios.get(API_URL + 'all');
-  // }
+  updateUser(user) {
+    return axios.put(API_URL, user);
+  }
 
-  // getUserBoard() {
-  //   return axios.get(API_URL + 'user', { headers: authHeader() });
-  // }
-
-  // getAdminBoard() {
-  //   return axios.get(API_URL + 'admin', { headers: authHeader() });
-  // }
+  deleteUser(id){
+    return axios.delete(API_URL + `/${id}`);
+  }
 }
 
 export default new UserService();

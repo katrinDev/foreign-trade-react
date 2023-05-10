@@ -9,7 +9,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    let currentUser = localStorage.getItem("user");
+    let currentUser = JSON.parse(localStorage.getItem("user"));
 
     if (currentUser) {
       setIsAuth(true);
