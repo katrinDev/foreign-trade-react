@@ -17,7 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 
-export default function FullFeaturedCrudGrid() {
+export default function UsersCrudGrid() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [allUsers, setAllUsers] = useState([]);
@@ -265,6 +265,14 @@ export default function FullFeaturedCrudGrid() {
         onRowEditStart={handleRowEditStart}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        pageSizeOptions={[7]}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 7,
+            },
+          },
+        }}
       />
       {
         <Snackbar

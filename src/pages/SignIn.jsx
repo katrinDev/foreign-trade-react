@@ -10,10 +10,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AuthService from "../services/authService";
+import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/context";
-import Snackbar from "@mui/material/Snackbar";
 
 const theme = createTheme();
 

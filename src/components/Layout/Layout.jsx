@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/context";
 import UserNavbar from "../UI/Nav/UserNavbar";
 
 export default function Layout({ children, ...props }) {
-  const { isAuth, isAdmin } = useContext(AuthContext);
+  const { isAdmin } = useContext(AuthContext);
 
   return isAdmin ? (
     <>

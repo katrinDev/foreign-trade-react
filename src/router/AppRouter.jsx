@@ -2,8 +2,6 @@ import { publicRoutes, adminRoutes, userRoutes } from "../router/routes";
 import { useContext } from "react";
 import { AuthContext } from "../context/context";
 import {Navigate, Route, Routes} from "react-router-dom";
-import AdminNavbar from "../components/UI/Nav/AdminNavbar";
-import UserNavbar from "../components/UI/Nav/UserNavbar";
 import Layout from "../components/Layout/Layout";
 
 

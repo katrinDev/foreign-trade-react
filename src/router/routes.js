@@ -3,18 +3,17 @@ import About from "../pages/About";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Companies from "../pages/privatePages/Companies";
-import Employees from "../pages/privatePages/onlyAdminPages/Employees";
 import Items from "../pages/privatePages/Items";
-import Users from "../pages/privatePages/onlyAdminPages/Users";
 import ExportTrades from "../pages/privatePages/ExportTrades";
 import ImportTrades from "../pages/privatePages/ImportTrades";
-import FullFeaturedCrudGrid from "../components/Tables/FullFeaturedCrudGrid";
+import UsersCrudGrid from "../components/Tables/UsersCrudGrid";
+import EmployeesCrudGrid from "../components/Tables/EmployeesCrudGrid";
 
 
 export const adminRoutes = [
     {path: '/about', component: About, name: 'О сайте', exact: true},
-    {path: '/users', component: FullFeaturedCrudGrid, name: 'Пользователи', exact: true},
-    {path: '/employees', component: Employees, name: 'Сотрудники', exact: true},
+    {path: '/users', component: UsersCrudGrid, name: 'Пользователи', exact: true},
+    {path: '/employees', component: EmployeesCrudGrid, name: 'Сотрудники', exact: true},
     {path: '/companies', component: Companies, name: 'Компании-партнеры', exact: true},
     {path: '/items', component: Items, name: 'Товары', exact: true},
 ]

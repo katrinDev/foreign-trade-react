@@ -14,7 +14,6 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
 } from "@mui/x-data-grid-pro";
-import { randomId } from "@mui/x-data-grid-generator";
 import userService from "../../services/userService";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -54,6 +53,9 @@ AddToolbar.propTypes = {
 
 function addUser(newUser) {
   userService.addUser({ })
+}
+
+function updateUser() {
 }
 
 export default function AnotherFull() {
