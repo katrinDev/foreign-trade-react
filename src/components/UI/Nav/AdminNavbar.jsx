@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const AdminNavbar = () => {
-  const { isAuth, setIsAuth } = useContext(AuthContext);
+  const { setIsAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const logout = () => {
