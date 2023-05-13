@@ -102,21 +102,12 @@ export default function SignUp() {
         .then((res) => {
           serverAnswer = res.data?.message;
 
-          setSnackbarProps({ ...snackbarProps, severity: "success" });
+          setSnackbarProps({ message: serverAnswer, open: true,  severity: "success" });
         })
         .catch((error) => {
           serverAnswer = error.response?.data?.message;
 
-          setSnackbarProps({ ...snackbarProps, severity: "error" });
-        })
-        .finally(() => {
-          setSnackbarProps({
-            ...snackbarProps,
-            open: true,
-            message: serverAnswer,
-          });
-
-          console.log(serverAnswer);
+          setSnackbarProps({ message: serverAnswer, open: true, severity: "error" });
         });
     } else {
       setSnackbarProps({
