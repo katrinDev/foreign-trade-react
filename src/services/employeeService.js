@@ -8,7 +8,6 @@ class EmployeeService {
   }
 
   addEmployee(employee) {
-    console.log(employee);
     return axios.post(API_URL, employee);
   }
 
