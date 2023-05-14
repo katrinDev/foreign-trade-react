@@ -8,15 +8,15 @@ import ExportTrades from "../pages/privatePages/ExportTrades";
 import ImportTrades from "../pages/privatePages/ImportTrades";
 import UsersCrudGrid from "../components/Tables/UsersCrudGrid";
 import EmployeesCrudGrid from "../components/Tables/EmployeesCrudGrid";
-import ItemsCrudGrid from "../components/Tables/ItemsCrudGrid";
 import { ItemsGrid } from "../components/Tables/ItemsGrid";
+import { CompaniesGrid } from "../components/Tables/CompaniesGrid";
 
 
 export const adminRoutes = [
     {path: '/about', component: About, name: 'О сайте', exact: true},
     {path: '/users', component: UsersCrudGrid, name: 'Пользователи', exact: true},
     {path: '/employees', component: EmployeesCrudGrid, name: 'Сотрудники', exact: true},
-    {path: '/companies', component: Companies, name: 'Компании-партнеры', exact: true},
+    {path: '/companies', component: CompaniesGrid, name: 'Компании-партнеры', exact: true},
     {path: '/items', component: ItemsGrid, name: 'Товары', exact: true},
 ]
 

@@ -1,4 +1,4 @@
-import itemRepository from "./itemRepository";
+import itemRepository from "../repositories/itemRepository";
 
 class ItemService {
   getItems({setRows, setAllItems}) {
@@ -24,7 +24,6 @@ class ItemService {
 
   updateItem({ updatedItem, setSnackbarProps, setRows }) {
 
-    console.log("Я апдеййчусь", updatedItem.id);
     itemRepository
       .updateItem({
         itemId: updatedItem.id,

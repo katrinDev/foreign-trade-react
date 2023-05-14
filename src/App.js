@@ -11,7 +11,7 @@ function App() {
   useEffect(() => {
     let currentUser = JSON.parse(localStorage.getItem("user"));
 
-    if (currentUser) {
+    if (currentUser) {  
       setIsAuth(true);
       if (currentUser.role?.roleId === 1) {
         setIsAdmin(true);

@@ -8,6 +8,7 @@ import Layout from "../components/Layout/Layout";
 const AppRouter = () => {
     const {isAuth, isAdmin} = useContext(AuthContext);
 
+
     return (
         isAuth ? 
         isAdmin ?

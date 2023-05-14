@@ -7,7 +7,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import itemService from "../../services/itemService";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useState, useEffect } from "react";
@@ -16,15 +15,25 @@ import {
   GridToolbarContainer,
   GridActionsCellItem,
 } from "@mui/x-data-grid-pro";
+import companyService from "../../services/companyService";
+import { Country } from "../../enums/countryEnum.ts";
 
 function AddToolbar(props) {
-  const { setRows, setRowModesModel, allItems } = props;
+  const { setRows, setRowModesModel, allCompanies } = props;
 
   const handleAddClick = () => {
-    const id = allItems.slice(-1)[0].itemId + 1;
+    const id = allCompanies.slice(-1)[0].companyId + 1;
     setRows((oldRows) => [
       ...oldRows,
-      { id, name: "", cost: 0, type: "", isNew: true },
+      {
+        id,
+        name: "",
+        country: "",
+        account: "",
+        email: "",
+        type: "",
+        isNew: true,
+      },
     ]);
 
     setRowModesModel((oldModel) => ({
@@ -45,26 +54,27 @@ function AddToolbar(props) {
 AddToolbar.propTypes = {
   setRowModesModel: PropTypes.func.isRequired,
   setRows: PropTypes.func.isRequired,
-  allItems: PropTypes.array.isRequired,
+  allCompanies: PropTypes.array.isRequired,
 };
 
-export function ItemsGrid() {
-    const [rows, setRows] = useState([]);
-    const [rowModesModel, setRowModesModel] = useState({});
-    const [allItems, setAllItems] = useState([]);
-    const [tradeTypeValue, setTradeTypeValue] = useState("");
 
-    const [snackbarProps, setSnackbarProps] = useState({
-      open: false,
-      severity: "error",
-      message: "",
-    });
+export function CompaniesGrid() {
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [allCompanies, setAllCompanies] = useState([]);
+  const [tradeTypeValue, setTradeTypeValue] = useState("");
+  const [countryValue, setCountryValue] = useState("");
+
+  const [snackbarProps, setSnackbarProps] = useState({
+    open: false,
+    severity: "error",
+    message: "",
+  });
 
 
-
-    useEffect(() => {
-      itemService.getItems({ setRows, setAllItems });
-    }, []);
+  useEffect(() => {
+    companyService.getCompanies({ setRows, setAllCompanies, setSnackbarProps });
+  }, []);
 
   const handleRowEditStart = (params, event) => {
     event.defaultMuiPrevented = true;
@@ -95,7 +105,7 @@ export function ItemsGrid() {
 
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
-    itemService.deleteItem({ id, setSnackbarProps, setRows });
+    companyService.deleteCompany({ id, setSnackbarProps, setRows });
   };
 
   const handleCancelClick = (id) => () => {
@@ -110,20 +120,22 @@ export function ItemsGrid() {
     }
   };
 
-  const processRowUpdate = (updatedItem) => {
+  const processRowUpdate = (updatedCompany) => {
+    let currentRow = rows.find((row) => row.id === updatedCompany.id);
 
-    let currentRow = rows.find(row => row.id === updatedItem.id);
-    const realChangedObj = {...updatedItem, type: currentRow.type};
+    console.log("Current row: ", currentRow);
+
+    const realChangedObj = {...updatedCompany, type: currentRow.type, country: currentRow.country};
 
     console.log("Updated row: ", realChangedObj);
 
-    setRows(rows.map((row) => (row.id === updatedItem.id ? realChangedObj : row)));
+    setRows(rows.map((row) => (row.id === updatedCompany.id ? realChangedObj : row)));
 
-    updatedItem.isNew
-      ? itemService.addItem({ newItem: realChangedObj, setSnackbarProps, setRows })
-      : itemService.updateItem({ updatedItem: realChangedObj, setSnackbarProps, setRows });
+    updatedCompany.isNew
+      ? companyService.addCompany({ newCompany: realChangedObj, setSnackbarProps, setRows })
+      : companyService.updateCompany({ updatedCompany: realChangedObj, setSnackbarProps, setRows });
 
-    return updatedItem;
+    return updatedCompany;
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -139,13 +151,57 @@ export function ItemsGrid() {
     {
       field: "name",
       headerName: "Название",
-      width: 340,
+      width: 130,
+      editable: true,
+    },
+    {
+      field: "country",
+      headerName: "Страна",
+      width: 120,
+      editable: true,
+      renderEditCell: (params) => (
+        <Select
+          labelId="status-select-label"
+          id="status-select"
+          value={countryValue}
+          onChange={(event) => {
+            setCountryValue(event.target.value);
+
+            setRows(
+              rows.map((row) => {
+                return row.id === params.id
+                  ? { ...row, country: event.target.value }
+                  : row;
+              })
+            );
+          }}
+          
+          fullWidth
+        >
+          <MenuItem value="Казахстан">Казахстан</MenuItem>
+          <MenuItem value="РФ">РФ</MenuItem>
+          <MenuItem value="Италия">Италия</MenuItem>
+          <MenuItem value="Армения">Армения</MenuItem>
+          <MenuItem value="Бельгия">Бельгия</MenuItem>
+        </Select>
+      ),
+    },
+    {
+      field: "account",
+      headerName: "Расчетный счет",
+      width: 180,
+      editable: true,
+    },
+    {
+      field: "email",
+      headerName: "Почта",
+      width: 220,
       editable: true,
     },
     {
       field: "type",
-      headerName: "Тип товара",
-      width: 130,
+      headerName: "Тип услуг",
+      width: 120,
       editable: true,
       renderEditCell: (params) => (
         <Select
@@ -168,13 +224,6 @@ export function ItemsGrid() {
           <MenuItem value="EXPORT">EXPORT</MenuItem>
         </Select>
       ),
-    },
-    {
-      field: "cost",
-      headerName: "Стоимость",
-      type: "number",
-      width: 110,
-      editable: true,
     },
     {
       field: "actions",
@@ -241,7 +290,7 @@ export function ItemsGrid() {
           toolbar: {
             setRows,
             setRowModesModel,
-            allItems: allItems,
+            allCompanies,
           },
         }}
       />

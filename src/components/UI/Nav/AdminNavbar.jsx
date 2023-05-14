@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 
 const AdminNavbar = () => {
-  const { setIsAuth } = useContext(AuthContext);
+  const { setIsAuth, setIsAdmin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const logout = () => {
     setIsAuth(false);
+    setIsAdmin(false);
     localStorage.removeItem("user");
   };
 

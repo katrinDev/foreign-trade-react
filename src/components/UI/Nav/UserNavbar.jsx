@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 
 const UserNavbar = () => {
-  const { setIsAuth } = useContext(AuthContext);
+  const { setIsAuth, setIsAdmin } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const logout = () => {
     setIsAuth(false);
+    setIsAdmin(false);
+
     localStorage.removeItem("user");
   };
 
