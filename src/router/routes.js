@@ -12,7 +12,7 @@ import { CompaniesGridUser } from "../components/Tables/CompaniesGridUser";
 import { ItemsGridUser } from "../components/Tables/ItemsGridUser";
 
 export const adminRoutes = [
-  { path: "/about", component: About, name: "О сайте", exact: true },
+  { path: "/about", component: About, name: "Статистика", exact: true },
   {
     path: "/users",
     component: UsersGrid,
@@ -35,11 +35,11 @@ export const adminRoutes = [
 ];
 
 export const userRoutes = [
-  { path: "/about", component: About, name: "О сайте", exact: true },
+  { path: "/about", component: About, name: "Статистика компании", exact: true },
   {
     path: "/companies",
     component: CompaniesGridUser,
-    name: "Компании-партнеры",
+    name: "Партнеры",
     exact: true,
   },
   { path: "/items", component: ItemsGridUser, name: "Товары", exact: true },
