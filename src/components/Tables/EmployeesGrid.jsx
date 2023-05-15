@@ -52,7 +52,7 @@ AddToolbar.propTypes = {
   allEmployees: PropTypes.array.isRequired,
 };
 
-export default function EmployeesCrudGrid() {
+export default function EmployeesGrid() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [isEditableCell, setIsEditableCell] = useState(false);

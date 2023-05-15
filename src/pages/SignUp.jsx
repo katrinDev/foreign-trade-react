@@ -105,7 +105,7 @@ export default function SignUp() {
           setSnackbarProps({ message: serverAnswer, open: true,  severity: "success" });
         })
         .catch((error) => {
-          serverAnswer = error.response?.data?.message;
+          serverAnswer = error.response?.data?.message || error.message;
 
           setSnackbarProps({ message: serverAnswer, open: true, severity: "error" });
         });

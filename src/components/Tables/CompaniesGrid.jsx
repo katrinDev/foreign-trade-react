@@ -16,7 +16,7 @@ import {
   GridActionsCellItem,
 } from "@mui/x-data-grid-pro";
 import companyService from "../../services/companyService";
-import { Country } from "../../enums/countryEnum.ts";
+
 
 function AddToolbar(props) {
   const { setRows, setRowModesModel, allCompanies } = props;

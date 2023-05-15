@@ -31,7 +31,7 @@ const AppRouter = () => {
                 <Route
                     path={route.path} 
                     element={<Layout title={route.name}>
-                                <route.component/>
+                                <route.component />
                             </Layout>}
                     exact={route.exact}
                     key={route.path}

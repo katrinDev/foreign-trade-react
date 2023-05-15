@@ -16,8 +16,8 @@ export default function Layout({ children, ...props }) {
   ) : (
     <>
       <UserNavbar />
-      <h1>{props.title}</h1>
-      {children}
+      <h1 style={{ padding: "10px", marginTop: "20px"}}>{props.title}</h1>
+      <div style={{ padding: '20px', minWidth: "600px", minHeight: "800px"}}>{children}</div>
     </>
   );
 }

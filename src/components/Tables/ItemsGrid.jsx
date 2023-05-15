@@ -49,22 +49,20 @@ AddToolbar.propTypes = {
 };
 
 export function ItemsGrid() {
-    const [rows, setRows] = useState([]);
-    const [rowModesModel, setRowModesModel] = useState({});
-    const [allItems, setAllItems] = useState([]);
-    const [tradeTypeValue, setTradeTypeValue] = useState("");
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [allItems, setAllItems] = useState([]);
+  const [tradeTypeValue, setTradeTypeValue] = useState("");
 
-    const [snackbarProps, setSnackbarProps] = useState({
-      open: false,
-      severity: "error",
-      message: "",
-    });
+  const [snackbarProps, setSnackbarProps] = useState({
+    open: false,
+    severity: "error",
+    message: "",
+  });
 
-
-
-    useEffect(() => {
-      itemService.getItems({ setRows, setAllItems });
-    }, []);
+  useEffect(() => {
+    itemService.getItems({ setRows, setAllItems });
+  }, []);
 
   const handleRowEditStart = (params, event) => {
     event.defaultMuiPrevented = true;
@@ -111,17 +109,26 @@ export function ItemsGrid() {
   };
 
   const processRowUpdate = (updatedItem) => {
-
-    let currentRow = rows.find(row => row.id === updatedItem.id);
-    const realChangedObj = {...updatedItem, type: currentRow.type};
+    let currentRow = rows.find((row) => row.id === updatedItem.id);
+    const realChangedObj = { ...updatedItem, type: currentRow.type };
 
     console.log("Updated row: ", realChangedObj);
 
-    setRows(rows.map((row) => (row.id === updatedItem.id ? realChangedObj : row)));
+    setRows(
+      rows.map((row) => (row.id === updatedItem.id ? realChangedObj : row))
+    );
 
     updatedItem.isNew
-      ? itemService.addItem({ newItem: realChangedObj, setSnackbarProps, setRows })
-      : itemService.updateItem({ updatedItem: realChangedObj, setSnackbarProps, setRows });
+      ? itemService.addItem({
+          newItem: realChangedObj,
+          setSnackbarProps,
+          setRows,
+        })
+      : itemService.updateItem({
+          updatedItem: realChangedObj,
+          setSnackbarProps,
+          setRows,
+        });
 
     return updatedItem;
   };

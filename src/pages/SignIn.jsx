@@ -94,7 +94,7 @@ export default function SignIn() {
           navigate("/about");
         })
         .catch((error) => {
-          serverAnswer = error.response?.data.message;
+          serverAnswer = error.response?.data.message || error.message;
 
           if(!serverAnswer){
             serverAnswer = "Ошибка соединения с сервером!"
