@@ -62,7 +62,7 @@ class UserService {
         message: `Аккаунт пользователя ${deletedUser.username} успешно удален!`,
       });
     } catch (error) {
-      serverAnswer = error.response?.data.message;
+      const serverAnswer = error.response?.data.message;
 
       setSnackbarProps({
         open: true,

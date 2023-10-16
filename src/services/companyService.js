@@ -1,118 +1,93 @@
-import companyRepository from "../repositories/companyRepository";
+import axios from "axios";
+
+const API_URL = "http://localhost:8080/api/companies";
 
 class CompanyService {
-  getCompanies({ setRows, setAllCompanies, setSnackbarProps }) {
-    companyRepository
-      .getCompanies()
-      .then((response) => {
-        setAllCompanies(response.data);
+  async getCompanies({ setRows, setAllCompanies, setSnackbarProps }) {
+    try {
+      const { data: allCompanies } = await axios.get(API_URL);
 
-        console.log(response.data);
-        setRows(
-          response.data.map((company) => ({
-            id: company.companyId,
-            name: company.companyName,
-            country: company.country,
-            account: company.checkingAccount,
-            email: company.companyEmail,
-            type: company.tradeType.tradeTypeName,
-          }))
-        );
-      })
-      .catch((error) => {
-        setSnackbarProps({
-          open: true,
-          severity: "error",
-          message: error.response?.data.message || error.message,
-        });
+      setAllCompanies(allCompanies);
+
+      console.log(allCompanies);
+      setRows(
+        allCompanies.map((company) => ({
+          id: company.companyId,
+          name: company.companyName,
+          country: company.country,
+          account: company.checkingAccount,
+          email: company.companyEmail,
+          type: company.tradeType.tradeTypeName,
+        }))
+      );
+    } catch (error) {
+      setSnackbarProps({
+        open: true,
+        severity: "error",
+        message: error.response?.data.message || error.message,
       });
+    } finally {
+      setSnackbarProps({ open: false, severity: "error", message: "" });
+    }
   }
 
-  updateCompany({ updatedCompany, setSnackbarProps, setRows }) {
-    companyRepository
-      .updateCompany({
-        companyId: updatedCompany.id,
-        companyName: updatedCompany.name,
-        country: updatedCompany.country,
-        checkingAccount: updatedCompany.account,
-        companyEmail: updatedCompany.email,
-        tradeType: {
-          tradeTypeName: updatedCompany.type,
-        },
-      })
-      .then((response) => {
-        setSnackbarProps({
-          open: true,
-          severity: "success",
-          message: `Данные о компании ${response.data.companyName} успешно изменены!`,
-        });
-      })
-      .catch((error) => {
-        setSnackbarProps({
-          open: true,
-          severity: "error",
-          message: error.response?.data.message || error.message,
-        });
+  async updateCompany({ company, setSnackbarProps }) {
+    try {
+      const { data: updatedCompany } = await axios.put(API_URL, company);
 
-        this.getCompanies(setRows);
+      setSnackbarProps({
+        open: true,
+        severity: "success",
+        message: `Данные о компании ${updatedCompany.companyName} успешно изменены!`,
       });
-
-    setSnackbarProps({ open: false, severity: "error", message: "" });
+    } catch (error) {
+      setSnackbarProps({
+        open: true,
+        severity: "error",
+        message: error.response?.data.message || error.message,
+      });
+    } finally {
+      setSnackbarProps({ open: false, severity: "error", message: "" });
+    }
   }
 
-  addCompany({ newCompany, setSnackbarProps, setRows }) {
-    companyRepository
-      .addCompany({
-        companyName: newCompany.name,
-        country: newCompany.country,
-        checkingAccount: newCompany.account,
-        companyEmail: newCompany.email,
-        tradeType: {
-          tradeTypeName: newCompany.type,
-        },
-      })
-      .then((response) => {
-        setSnackbarProps({
-          open: true,
-          severity: "success",
-          message: `Компания-партнер "${response.data.companyName}" успешно добавлена!`,
-        });
-      })
-      .catch((error) => {
-        setSnackbarProps({
-          open: true,
-          severity: "error",
-          message: error.response?.data.message || error.message,
-        });
-
-        this.getCompanies(setRows);
+  async addCompany({ newCompany, setSnackbarProps }) {
+    try {
+      const { data: company } = await axios.post(API_URL, newCompany);
+      setSnackbarProps({
+        open: true,
+        severity: "success",
+        message: `Компания-партнер "${company.companyName}" успешно добавлена!`,
       });
-
-    setSnackbarProps({ open: false, severity: "error", message: "" });
+    } catch (error) {
+      setSnackbarProps({
+        open: true,
+        severity: "error",
+        message: error.response?.data.message || error.message,
+      });
+    } finally {
+      setSnackbarProps({ open: false, severity: "error", message: "" });
+    }
   }
 
-  deleteCompany({ id, setSnackbarProps, setRows }) {
-    companyRepository
-      .deleteCompany(id)
-      .then((response) => {
-        console.log("После удаления: ", response);
-        setSnackbarProps({
-          open: true,
-          severity: "success",
-          message: `Данные о компании "${response.data.companyName}" успешно удалены!`,
-        });
-      })
-      .catch((error) => {
-        setSnackbarProps({
-          open: true,
-          severity: "error",
-          message: error.response?.data.message || error.message,
-        });
+  async deleteCompany({ id, setSnackbarProps }) {
+    try {
+      const { data: deletedCompany } = await axios.delete(API_URL + `/${id}`);
 
-        this.getCompanies(setRows);
+      setSnackbarProps({
+        open: true,
+        severity: "success",
+        message: `Данные о компании "${deletedCompany.companyName}" успешно удалены!`,
       });
-
-    setSnackbarProps({ open: false, severity: "error", message: "" });
+    } catch (error) {
+      setSnackbarProps({
+        open: true,
+        severity: "error",
+        message: error.response?.data.message || error.message,
+      });
+    } finally {
+      setSnackbarProps({ open: false, severity: "error", message: "" });
+    }
   }
 }
 

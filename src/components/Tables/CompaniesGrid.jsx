@@ -17,45 +17,6 @@ import {
 } from "@mui/x-data-grid-pro";
 import companyService from "../../services/companyService";
 
-function AddToolbar(props) {
-  const { setRows, setRowModesModel, allCompanies } = props;
-
-  const handleAddClick = () => {
-    const id = allCompanies.slice(-1)[0].companyId + 1;
-    setRows((oldRows) => [
-      ...oldRows,
-      {
-        id,
-        name: "",
-        country: "",
-        account: "",
-        email: "",
-        type: "",
-        isNew: true,
-      },
-    ]);
-
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
-        Добавить
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-
-AddToolbar.propTypes = {
-  setRowModesModel: PropTypes.func.isRequired,
-  setRows: PropTypes.func.isRequired,
-  allCompanies: PropTypes.array.isRequired,
-};
-
 export function CompaniesGrid() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -102,7 +63,7 @@ export function CompaniesGrid() {
 
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
-    companyService.deleteCompany({ id, setSnackbarProps, setRows });
+    companyService.deleteCompany({ id, setSnackbarProps });
   };
 
   const handleCancelClick = (id) => () => {
@@ -134,16 +95,25 @@ export function CompaniesGrid() {
       rows.map((row) => (row.id === updatedCompany.id ? realChangedObj : row))
     );
 
+    const company = {
+      companyId: realChangedObj.id,
+      companyName: realChangedObj.name,
+      country: realChangedObj.country,
+      checkingAccount: realChangedObj.account,
+      companyEmail: realChangedObj.email,
+      tradeType: {
+        tradeTypeName: realChangedObj.type,
+      },
+    };
+
     updatedCompany.isNew
       ? companyService.addCompany({
-          newCompany: realChangedObj,
+          company,
           setSnackbarProps,
-          setRows,
         })
       : companyService.updateCompany({
-          updatedCompany: realChangedObj,
+          company,
           setSnackbarProps,
-          setRows,
         });
 
     return updatedCompany;
@@ -322,3 +292,42 @@ export function CompaniesGrid() {
     </>
   );
 }
+
+function AddToolbar(props) {
+  const { setRows, setRowModesModel, allCompanies } = props;
+
+  const handleAddClick = () => {
+    const id = allCompanies.slice(-1)[0].companyId + 1;
+    setRows((oldRows) => [
+      ...oldRows,
+      {
+        id,
+        name: "",
+        country: "",
+        account: "",
+        email: "",
+        type: "",
+        isNew: true,
+      },
+    ]);
+
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
+        Добавить
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+
+AddToolbar.propTypes = {
+  setRowModesModel: PropTypes.func.isRequired,
+  setRows: PropTypes.func.isRequired,
+  allCompanies: PropTypes.array.isRequired,
+};
