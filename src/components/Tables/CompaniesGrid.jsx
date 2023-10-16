@@ -17,7 +17,6 @@ import {
 } from "@mui/x-data-grid-pro";
 import companyService from "../../services/companyService";
 
-
 function AddToolbar(props) {
   const { setRows, setRowModesModel, allCompanies } = props;
 
@@ -57,7 +56,6 @@ AddToolbar.propTypes = {
   allCompanies: PropTypes.array.isRequired,
 };
 
-
 export function CompaniesGrid() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -70,7 +68,6 @@ export function CompaniesGrid() {
     severity: "error",
     message: "",
   });
-
 
   useEffect(() => {
     companyService.getCompanies({ setRows, setAllCompanies, setSnackbarProps });
@@ -125,15 +122,29 @@ export function CompaniesGrid() {
 
     console.log("Current row: ", currentRow);
 
-    const realChangedObj = {...updatedCompany, type: currentRow.type, country: currentRow.country};
+    const realChangedObj = {
+      ...updatedCompany,
+      type: currentRow.type,
+      country: currentRow.country,
+    };
 
     console.log("Updated row: ", realChangedObj);
 
-    setRows(rows.map((row) => (row.id === updatedCompany.id ? realChangedObj : row)));
+    setRows(
+      rows.map((row) => (row.id === updatedCompany.id ? realChangedObj : row))
+    );
 
     updatedCompany.isNew
-      ? companyService.addCompany({ newCompany: realChangedObj, setSnackbarProps, setRows })
-      : companyService.updateCompany({ updatedCompany: realChangedObj, setSnackbarProps, setRows });
+      ? companyService.addCompany({
+          newCompany: realChangedObj,
+          setSnackbarProps,
+          setRows,
+        })
+      : companyService.updateCompany({
+          updatedCompany: realChangedObj,
+          setSnackbarProps,
+          setRows,
+        });
 
     return updatedCompany;
   };
@@ -175,7 +186,6 @@ export function CompaniesGrid() {
               })
             );
           }}
-          
           fullWidth
         >
           <MenuItem value="Казахстан">Казахстан</MenuItem>

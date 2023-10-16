@@ -6,16 +6,12 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { DataGrid } from "@mui/x-data-grid";
 
-import {
-  GridRowModes,
-  GridActionsCellItem,
-} from "@mui/x-data-grid-pro";
+import { GridRowModes, GridActionsCellItem } from "@mui/x-data-grid-pro";
 import userService from "../../services/userService";
-import { useEffect,  useState} from "react";
-import { ROLES } from "../../helpers/enum";
+import { useEffect, useState } from "react";
+import { ROLES } from "../../helpers/rolesEnum";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
-
 
 export default function UsersGrid() {
   const [rows, setRows] = useState([]);
@@ -28,83 +24,19 @@ export default function UsersGrid() {
   });
   let serverAnswer = "";
 
+  useEffect(() => {
+    async function fetchUsers() {
+      await userService.getUsers({ setAllUsers, setRows, setSnackbarProps });
+    }
 
-  function updateUser(updatedUser) {
-    userService
-      .updateUser({
-        userId: updatedUser.id,
-        username: updatedUser.username,
-        role: { roleName: updatedUser.role },
-      })
-      .then((response) => {
-        setSnackbarProps({
-          open: true,
-          severity: "success",
-          message: `Роль пользователя ${response.data.username} успешно изменена!`,
-        });
-      })
-      .catch((error) => {
-        serverAnswer = error.response?.data.message;
+    fetchUsers();
+  }, []);
 
-          setSnackbarProps({
-            open: true,
-            severity: "error",
-            message: serverAnswer,
-          });
-      });
-
-      setSnackbarProps({ open: false, severity: "error", message: "" });
-  }
-  
-  function deleteUser(id) {
-    userService
-      .deleteUser(id)
-      .then((response) => {
-        setSnackbarProps({
-          open: true,
-          severity: "success",
-          message: `Аккаунт пользователя ${response.data.username} успешно удален!`,
-        });
-      })
-      .catch((error) => {
-        serverAnswer = error.response?.data.message;
-
-          setSnackbarProps({
-            open: true,
-            severity: "error",
-            message: serverAnswer,
-          });
-      });
-
-      setSnackbarProps({ open: false, severity: "error", message: "" });
-  }
-
-  
   function getNewRole(editingRow) {
     const newRole = editingRow.role === ROLES.ADMIN ? ROLES.USER : ROLES.ADMIN;
 
     return newRole;
   }
-
-  useEffect(() => {
-    userService
-      .getUsers()
-      .then((response) => {
-        setAllUsers(response.data);
-
-        setRows(
-          response.data.map((user) => ({
-            id: user.userId,
-            username: user.username,
-            role: user.role?.roleName,
-            fullName: `${user.person.name} ${user.person.patronymic} ${user.person.surname}`,
-          }))
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -125,7 +57,7 @@ export default function UsersGrid() {
   const handleEditClick = (id) => () => {
     const editingRow = rows.find((row) => row.id === id);
 
-    const newRole = editingRow.role === ROLES.ADMIN ? ROLES.USER : ROLES.ADMIN;
+    const newRole = getNewRole(editingRow);
 
     setRows(
       rows.map((row) =>
@@ -136,20 +68,24 @@ export default function UsersGrid() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id) => () => {
+  const handleSaveClick = (id) => async () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
 
     const editingRow = rows.find((row) => row.id === id);
 
-    console.log("save edit click all: ", rows);
-
-    updateUser(editingRow);
+    console.log("Saved changes: ", rows);
+    const user = {
+      userId: editingRow.id,
+      username: editingRow.username,
+      role: { roleName: editingRow.role },
+    };
+    await userService.updateUser({ user, setSnackbarProps });
   };
 
-  const handleDeleteClick = (id) => () => {
+  const handleDeleteClick = (id) => async () => {
     setRows(rows.filter((row) => row.id !== id));
 
-    deleteUser(id);
+    await userService.deleteUser({ id, setSnackbarProps });
   };
 
   const handleCancelClick = (id) => () => {
