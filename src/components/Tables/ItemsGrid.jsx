@@ -17,37 +17,6 @@ import {
   GridActionsCellItem,
 } from "@mui/x-data-grid-pro";
 
-function AddToolbar(props) {
-  const { setRows, setRowModesModel, allItems } = props;
-
-  const handleAddClick = () => {
-    const id = allItems.slice(-1)[0].itemId + 1;
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: "", cost: 0, type: "", isNew: true },
-    ]);
-
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
-        Добавить
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-
-AddToolbar.propTypes = {
-  setRowModesModel: PropTypes.func.isRequired,
-  setRows: PropTypes.func.isRequired,
-  allItems: PropTypes.array.isRequired,
-};
-
 export function ItemsGrid() {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -61,7 +30,7 @@ export function ItemsGrid() {
   });
 
   useEffect(() => {
-    itemService.getItems({ setRows, setAllItems });
+    itemService.getItems({ setRows, setAllItems, setSnackbarProps });
   }, []);
 
   const handleRowEditStart = (params, event) => {
@@ -270,3 +239,34 @@ export function ItemsGrid() {
     </>
   );
 }
+
+function AddToolbar(props) {
+  const { setRows, setRowModesModel, allItems } = props;
+
+  const handleAddClick = () => {
+    const id = allItems.slice(-1)[0].itemId + 1;
+    setRows((oldRows) => [
+      ...oldRows,
+      { id, name: "", cost: 0, type: "", isNew: true },
+    ]);
+
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+    }));
+  };
+
+  return (
+    <GridToolbarContainer>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleAddClick}>
+        Добавить
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+
+AddToolbar.propTypes = {
+  setRowModesModel: PropTypes.func.isRequired,
+  setRows: PropTypes.func.isRequired,
+  allItems: PropTypes.array.isRequired,
+};
